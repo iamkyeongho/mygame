@@ -4,10 +4,17 @@ import java.util.Scanner;
 
 public class CTerminal 
 {
-	Scanner input = new Scanner(System.in);
+	Scanner input = null;
 	
 	public CTerminal()
-	{ }
+	{
+		input = new Scanner(System.in);
+	}
+	
+	public CTerminal(Scanner _input)
+	{
+		input = _input;
+	}
 	
 	public static void Print(String message)
 	{

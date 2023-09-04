@@ -2,16 +2,24 @@ package mygame.minesweeper;
 
 import java.util.*;
 
+import mygame.CTerminal;
+import mygame.CUtility;
+
 public class Minesweeper
 {
 	private int xUser;
 	private int yUser;
 	private int BoardSize = 7;
+	
 	private boolean[][] openBoard = new boolean [BoardSize][BoardSize];
 	private char[][]board = new char[BoardSize][BoardSize];
 	private boolean[][] mines = new boolean[BoardSize][BoardSize];
-	public double minesCount = (BoardSize*BoardSize)*0.3;
-	private double non_minesNum = BoardSize - minesCount;
+	
+	private long minesCount = Math.round(BoardSize*BoardSize*0.1);
+	private long nonMinesCount = (BoardSize*BoardSize - minesCount);
+	
+	private boolean findMines = false;
+	
 	Scanner input = new Scanner(System.in); 
 	Random rand = new Random();
 	
@@ -21,32 +29,39 @@ public class Minesweeper
 		ms.play();
 	}
 	public Minesweeper()
-	{
-		
-	}
+	{ }
+	
 	public void play()
 	{
-		Start_Logic();
+		startLogic();
 	}
-	public void Start_Logic()
+	
+	public void startLogic()
 	{
 		int count = 0;
-		initializeBoard();
-		plant_Mines();
 		
-		do {
+		initializeBoard();
+		plantMines();
+		
+		do 
+		{
 			printBoard();
+			printMines();
 			OpenCell();
-			
+			if (findMines)
+				break;
 			count++;
-		}while(count < 20);
-		if(non_minesNum == 0)
+		}
+		while(count < 20);
+		
+		if(nonMinesCount == 0)
 		{
 			System.out.println("지뢰를 정확히 모두 찾으셨습니다!");
 		}
 		System.out.print("시스템 종료");
 	}
-	public void plant_Mines()
+	
+	public void plantMines()
 	{
 		int count = 0;	 
 		while(count < minesCount)
@@ -60,33 +75,42 @@ public class Minesweeper
 			}
 		}
 	}
+	
 	public void OpenCell()
 	{
-		while(true) {
-		xUser = input.nextInt();
-		yUser = input.nextInt();
-		if(openBoard[xUser][yUser])
+		while(true) 
 		{
-			System.out.println("이미 개방한 셀입니다");
-			continue;
-		}
-		if(!mines[xUser][xUser])
-		{
-			non_minesNum--;
-			openBoard[xUser][yUser] = true;
-			check_cell_empty(xUser,yUser);
-		}
-		break;
+			xUser = input.nextInt();
+			yUser = input.nextInt();
+			if(openBoard[xUser][yUser])
+			{
+				System.out.println("이미 개방한 셀입니다");
+				continue;
+			}
+			if(!mines[xUser][yUser])
+			{
+				nonMinesCount--;
+				openBoard[xUser][yUser] = true;
+				checkCellEmpty(xUser,yUser);
+			}
+			else
+			{
+				System.out.println("지뢰 셀입니다!");
+				findMines = true;
+			}
+			break;
 		}
 	}
-	public int check_nearCell_count(int xrow,int xcol)
+	public int checkNearCellCount(int xrow, int xcol)
 	{
 		int count = 0;
 		for(int i = -1; i < 2; i++)
 		{
 			for(int j = -1; j < 2; j++)
 			{
-				if(mines[xrow+i][xrow+j] && (xrow+i<BoardSize) && (xrow+i>=0) && (xcol+i<BoardSize) && (xcol+i>=0))
+				if((xrow+i<BoardSize) && (xrow+i>=0) 
+				&& (xcol+j<BoardSize) && (xcol+j>=0)
+				&& mines[xrow+i][xcol+j])
 				{
 					count++;
 				}
@@ -95,9 +119,9 @@ public class Minesweeper
 		return count;
 	}
 	
-	public void check_cell_empty(int xrow,int xcol)
+	public void checkCellEmpty(int xrow,int xcol)
 	{
-		int count = check_nearCell_count(xrow,xcol);
+		int count = checkNearCellCount(xrow, xcol);
 		if(count == 0)
 		{	
 			board[xrow][xcol] = ' ';
@@ -107,14 +131,17 @@ public class Minesweeper
 				{
 					int nRow = xrow + i;
 					int nCol = xcol + j;
-					if(!openBoard[nRow][nCol]&&(nRow >=0)&&(nRow < BoardSize)&&(nCol >= 0)&&(nCol < BoardSize))
+					if((nRow >=0)&&(nRow < BoardSize)
+					&&(nCol >= 0)&&(nCol < BoardSize)
+					&& !openBoard[nRow][nCol])
 					{
 						openBoard[nRow][nCol] = true;
-						check_cell_empty(nRow,nCol);
+						checkCellEmpty(nRow, nCol);
 					}
 				}
 			}
-		}else if(count > 0)
+		}
+		else if(count > 0)
 		{
 			board[xrow][xcol] = (char)(count+'0'); 
 		}
@@ -136,20 +163,49 @@ public class Minesweeper
 			{
 				if(!openBoard[i][j])
 				{
-					if((j == BoardSize-1)&&(i < BoardSize)) {
+					if((j == BoardSize-1)&&(i < BoardSize)) 
+					{
 						System.out.print("🔲 "+i);
-					}else
-					System.out.print("🔲");
-				}else {
+					}
+					else
+						System.out.print("🔲");
+				}
+				else
+				{
 					if((j == BoardSize-1)&&(i < BoardSize))
 					{
-						System.out.print(board[i][j]+" "+i);
-					}else
-					System.out.print(" "+board[i][j]);
+						System.out.print(" "+board[i][j]+" "+i);
+					}
+					else
+						System.out.print(" "+board[i][j]);
 				}
-			}System.out.println();
+			}
+			System.out.println();
 		}
 	}
+	
+	protected void printMines()
+	{
+		for(int i = 0; i < BoardSize; i++)
+		{
+			if(i == 0)
+			{
+				for(int c = 0; c < BoardSize; c++)
+				{
+					System.out.print(String.format("%s%d", ' ', c));
+				}
+				CTerminal.Println("");
+			}
+			for(int j = 0; j < BoardSize; j++)
+			{
+				if ((j == BoardSize-1) && (i < BoardSize)) 
+					System.out.print(String.format(" %d %d", CUtility.boolToInt(mines[i][j]), i));					
+				else
+					System.out.print(String.format(" %d", CUtility.boolToInt(mines[i][j])));
+			}
+			System.out.println("");
+		}
+	}		
 	
 	public void initializeBoard()
 	{

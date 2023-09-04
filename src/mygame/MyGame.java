@@ -24,7 +24,7 @@ public class MyGame {
 				System.out.print("\n시스템을 종료합니다");
 				break;
 			case 1:
-				(new CTxtOmok()).Play();			
+				(new CTxtOmok(input)).Play();			
 				break;
 			case 2:
 				new CWinOmok();

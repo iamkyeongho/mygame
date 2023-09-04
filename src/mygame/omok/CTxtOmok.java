@@ -1,5 +1,7 @@
 package mygame.omok;
 
+import java.util.Scanner;
+
 import mygame.CTerminal;
 
 public class CTxtOmok extends COmok 
@@ -14,6 +16,11 @@ public class CTxtOmok extends COmok
 	public CTxtOmok()
 	{
 		term = new CTerminal();
+	}
+	
+	public CTxtOmok(Scanner _input)
+	{
+		term = new CTerminal(_input);
 	}
 	
 	public void Play()
