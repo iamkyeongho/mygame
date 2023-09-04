@@ -1,8 +1,8 @@
 package mygame.minesweeper;
 
-import java.util.*;
+import java.util.Random;
+import java.util.Scanner;
 
-import mygame.CTerminal;
 import mygame.CUtility;
 
 public class Minesweeper
@@ -194,7 +194,7 @@ public class Minesweeper
 				{
 					System.out.print(String.format("%s%d", ' ', c));
 				}
-				CTerminal.Println("");
+				System.out.println("");
 			}
 			for(int j = 0; j < BoardSize; j++)
 			{

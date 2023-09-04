@@ -2,7 +2,7 @@ package mygame.omok;
 
 public abstract class COmok implements IOmok
 {
-	public abstract void DrawBoard();
+	public abstract void drawBoard();
 
 	protected int count = 0;	
 	protected char winner = IOmok.BLANK;
@@ -63,7 +63,7 @@ public abstract class COmok implements IOmok
 			return false;
 	}	
 	
-	public void PlaceStone(int row, int col) throws Exception
+	public void placeStone(int row, int col) throws Exception
 	{
 		if (checkPosition(row, col) == false)
 			throw new Exception(String.format("위치는 1부터 %d사이의 정수입니다.", BoardSize-1));
@@ -80,7 +80,7 @@ public abstract class COmok implements IOmok
 			currentPlayer = IOmok.WHITE;
 	}
 	
-	public void ClearBoard()
+	public void clearBoard()
 	{
 		initVariables();
 	}	

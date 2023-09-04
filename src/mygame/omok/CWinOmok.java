@@ -36,10 +36,10 @@ public class CWinOmok extends COmok implements ActionListener
 		window.setTitle(TITLE);
 		window.setLayout(new BorderLayout());
 		
-		this.panelGrid = new JPanel();
-		this.panelGrid.setLayout(new GridLayout(BoardSize-1,BoardSize-1,3,3));	
+		panelGrid = new JPanel();
+		panelGrid.setLayout(new GridLayout(BoardSize-1,BoardSize-1,3,3));	
 		window.add("Center", this.panelGrid);
-		this.DrawBoard();
+		drawBoard();
 		
 		message = new JTextArea("   오목 게임을 시작합니다. O가 놓을 위치를 클릭하세요.");		
 		window.add("South", message);
@@ -49,7 +49,7 @@ public class CWinOmok extends COmok implements ActionListener
 	}
 
 	@Override
-	public void DrawBoard() 
+	public void drawBoard() 
 	{
 		for (int i = 0; i < BoardSize-1; i++)
 		{
@@ -64,9 +64,9 @@ public class CWinOmok extends COmok implements ActionListener
 	}
 	
 	@Override
-	public void ClearBoard() 
+	public void clearBoard() 
 	{
-		super.ClearBoard();
+		super.clearBoard();
 		for (int i = 0; i < this.panelGrid.getComponentCount(); i++)
 		{
 			String name = this.panelGrid.getComponent(i).getClass().getSimpleName();
@@ -91,16 +91,16 @@ public class CWinOmok extends COmok implements ActionListener
 				int row = Integer.parseInt(position[0]);
 				int col = Integer.parseInt(position[1]);
 								
-				PlaceStone(row, col);
+				placeStone(row, col);
 				btn.setText(String.format("%c", getBoardStone(row, col)));
 				
 				if (findFiveStones(row, col))
 				{				
-					int result = CWindow.ShowOptionBox(String.format("%s의 승리입니다. 게임을 다시 하시겠습니까?", getWinner()), "오목");
+					int result = CWindow.showOptionBox(String.format("%s의 승리입니다. 게임을 다시 하시겠습니까?", getWinner()), "오목");
 					if (result == JOptionPane.YES_OPTION)
 					{
 						this.initVariables();
-						this.ClearBoard();
+						this.clearBoard();
 					}
 					else
 					{
@@ -110,15 +110,15 @@ public class CWinOmok extends COmok implements ActionListener
 			} 
 			catch (Exception ex) 
 			{
-				CWindow.ShowMessageBox(ex.getMessage());	
+				CWindow.showMessageBox(ex.getMessage());	
 			}
 		}
 	}
 
 	@Override
-	public void PlaceStone(int row, int col) throws Exception 
+	public void placeStone(int row, int col) throws Exception 
 	{		
-		super.PlaceStone(row, col);		
-		CWindow.PrintMessage(message, String.format("%c : %d-%d", getBoardStone(row, col), row, col));
+		super.placeStone(row, col);		
+		CWindow.printMessage(message, String.format("%c : %d-%d", getBoardStone(row, col), row, col));
 	}
 }

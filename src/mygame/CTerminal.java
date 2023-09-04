@@ -16,31 +16,31 @@ public class CTerminal
 		input = _input;
 	}
 	
-	public static void Print(String message)
+	public static void print(String message)
 	{
 		System.out.print(message);		
 	}
-	public static void Println(String message)
+	public static void println(String message)
 	{
 		System.out.println(message);		
 	}
 	
-	public String InputString()
+	public String inputString()
 	{
 		return input.next();
 	}
-	public int InputInt()
+	public int inputInt()
 	{
 		return input.nextInt();
 	}
 	
-	public String InputWithMessage(String message)
+	public String inputWithMessage(String message)
 	{
-		CTerminal.Print(message);
+		CTerminal.print(message);
 		return input.next();
 	}
 	
-	public void Close()
+	public void close()
 	{
 		if (input != null) input.close();
 	}

@@ -31,11 +31,11 @@ public class CWindow extends JFrame
 	
 	private void initWindow(int width, int height)
 	{
-		this.SetSize(width, height);
+		this.setSize(width, height);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
-	public void SetSize(int _width, int _height)
+	public void setSize(int _width, int _height)
 	{
 		width = _width;
 		height = _height;
@@ -50,18 +50,18 @@ public class CWindow extends JFrame
 		this.title = title;
 	}	
 	
-	public static void ShowMessageBox(String message)
+	public static void showMessageBox(String message)
 	{
 		JOptionPane.showMessageDialog(null, message);	
 	}
 	
-	public static int ShowOptionBox(String message, String title)
+	public static int showOptionBox(String message, String title)
 	{
 		return JOptionPane.showOptionDialog(null, message, title, 
 				JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, "Yes");	
 	} 
 	
-	public static void PrintMessage(JTextArea textArea, String message)
+	public static void printMessage(JTextArea textArea, String message)
 	{
 		textArea.setText(String.format("   %s", message));	
 	}

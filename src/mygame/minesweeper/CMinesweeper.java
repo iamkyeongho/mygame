@@ -35,16 +35,16 @@ public class CMinesweeper
 	
 	public void Dispose()
 	{
-		CTerminal.Println("게임을 종료합니다!");
+		CTerminal.println("게임을 종료합니다!");
 		if (term != null)
-			term.Close();
+			term.close();
 	}
 	
 	protected void initialize(CTerminal _term)
 	{
 		term = _term;
 		initBoard();	
-		CTerminal.Println("게임을 시작합니다!");
+		CTerminal.println("게임을 시작합니다!");
 	}
 	
 	protected void initBoard()
@@ -74,28 +74,28 @@ public class CMinesweeper
 			{
 				for(int c = 0; c < BoardSize; c++)
 				{
-					CTerminal.Print(String.format("%s%d", BLANK, c));
+					CTerminal.print(String.format("%s%d", BLANK, c));
 				}
-				CTerminal.Println("");
+				CTerminal.println("");
 			}
 			for(int j = 0; j < BoardSize; j++)
 			{
 				if(!openBoard[i][j])
 				{
 					if (j == BoardSize-1) 
-						CTerminal.Print(String.format("%s %d", DEFAULT_CELL, i));
+						CTerminal.print(String.format("%s %d", DEFAULT_CELL, i));
 					else
-						CTerminal.Print(DEFAULT_CELL);
+						CTerminal.print(DEFAULT_CELL);
 				}
 				else 
 				{
 					if (j == BoardSize-1)
-						CTerminal.Print(String.format(" %s %d", board[i][j], i));
+						CTerminal.print(String.format(" %s %d", board[i][j], i));
 					else
-						CTerminal.Print(String.format(" %s", board[i][j]));
+						CTerminal.print(String.format(" %s", board[i][j]));
 				}
 			}
-			CTerminal.Println("");
+			CTerminal.println("");
 		}
 	}
 	
@@ -107,18 +107,18 @@ public class CMinesweeper
 			{
 				for(int c = 0; c < BoardSize; c++)
 				{
-					CTerminal.Print(String.format("%s%d", BLANK, c));
+					CTerminal.print(String.format("%s%d", BLANK, c));
 				}
-				CTerminal.Println("");
+				CTerminal.println("");
 			}
 			for(int j = 0; j < BoardSize; j++)
 			{
 				if ((j == BoardSize-1) && (i < BoardSize)) 
-					CTerminal.Print(String.format(" %d %d", CUtility.boolToInt(mines[i][j]), i));					
+					CTerminal.print(String.format(" %d %d", CUtility.boolToInt(mines[i][j]), i));					
 				else
-					CTerminal.Print(String.format(" %d", CUtility.boolToInt(mines[i][j])));
+					CTerminal.print(String.format(" %d", CUtility.boolToInt(mines[i][j])));
 			}
-			CTerminal.Println("");
+			CTerminal.println("");
 		}
 	}	
 	
@@ -135,24 +135,24 @@ public class CMinesweeper
 				count++;
 			}
 		}
-		CTerminal.Println(String.format("지뢰 갯수 = %d(%d)",  minesCount, nonMinesCount));
+		CTerminal.println(String.format("지뢰 갯수 = %d(%d)",  minesCount, nonMinesCount));
 	}
 	
 	protected void openCell()
 	{
 		while(nonMinesCount > 0) 
 		{			
-			CTerminal.Print("오픈할 셀의 좌표를 입력해주세요 (row col): ");
-			int rowUser = term.InputInt();			
-			int colUser = term.InputInt();
+			CTerminal.print("오픈할 셀의 좌표를 입력해주세요 (row col): ");
+			int rowUser = term.inputInt();			
+			int colUser = term.inputInt();
 			if (!checkPosition(rowUser,  colUser))
 			{
-				CTerminal.Println("범위를 벗어났습니다. 다시 입력해주세요!");
+				CTerminal.println("범위를 벗어났습니다. 다시 입력해주세요!");
 				continue;
 			}
 			if(openBoard[rowUser][colUser])
 			{
-				CTerminal.Println("이미 개방한 셀입니다. 다시 입력해주세요!");
+				CTerminal.println("이미 개방한 셀입니다. 다시 입력해주세요!");
 				continue;
 			}
 			
@@ -166,12 +166,12 @@ public class CMinesweeper
 			else
 			{
 				findMines = true;
-				CTerminal.Println("지뢰가 있는 셀입니다!");
+				CTerminal.println("지뢰가 있는 셀입니다!");
 			}
 			break;
 		}
 		if (nonMinesCount == 0)
-			CTerminal.Println("지뢰를 모두 찾았습니다!");
+			CTerminal.println("지뢰를 모두 찾았습니다!");
 	}
 	
 	public int countMinesNearCell(int row, int col)
@@ -225,9 +225,9 @@ public class CMinesweeper
 		{
 			openCell();		
 			printBoard();
-			CTerminal.Println("");
+			CTerminal.println("");
 			printMines();
-			CTerminal.Println(String.format("지뢰 갯수 = %d(%d)",  minesCount, nonMinesCount));
+			CTerminal.println(String.format("지뢰 갯수 = %d(%d)",  minesCount, nonMinesCount));
 		}
 		while (!findMines);		
 	}

@@ -10,7 +10,7 @@ public interface IOmok
 	public static final char BLACK = '⬤';
 	public static final char BLANK = ' ';	
 	
-	public void DrawBoard();
-	public void ClearBoard();
-	public void PlaceStone(int x, int y) throws Exception;	
+	public void drawBoard();
+	public void clearBoard();
+	public void placeStone(int x, int y) throws Exception;	
 }
