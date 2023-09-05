@@ -2,6 +2,7 @@ package mygame;
 
 import java.util.Scanner;
 
+import mygame.minesweeper.CMinesweeper;
 import mygame.omok.CTxtOmok;
 import mygame.omok.CWinOmok;
 
@@ -30,6 +31,12 @@ public class MyGame {
 				new CWinOmok();
 				break;			
 			case 3:
+				CMinesweeper cm = new CMinesweeper(new CTerminal(input));
+				cm.printBoard();	
+				cm.plantMines();		
+				cm.printMines();
+				cm.play();
+				cm.dispose();
 				break;
 		}
 		if (input != null) input.close();

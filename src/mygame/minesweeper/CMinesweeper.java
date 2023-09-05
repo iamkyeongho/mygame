@@ -19,7 +19,7 @@ public class CMinesweeper
 	protected boolean[][] mines = new boolean[BoardSize][BoardSize];
 	protected boolean[][] openBoard = new boolean [BoardSize][BoardSize];
 
-	protected boolean findMines = false;
+	protected boolean findMines = false; 
 	protected CTerminal term;
 	protected Random rand = new Random();
 	
@@ -33,7 +33,7 @@ public class CMinesweeper
 		initialize(_term);		
 	}
 	
-	public void Dispose()
+	public void dispose()
 	{
 		CTerminal.println("게임을 종료합니다!");
 		if (term != null)
@@ -66,8 +66,9 @@ public class CMinesweeper
 			return false;
 	}
 	
-	protected void printBoard()
+	public void printBoard()
 	{
+		CTerminal.println("------------------");
 		for(int i = 0; i < BoardSize; i++)
 		{
 			if(i == 0)
@@ -97,10 +98,13 @@ public class CMinesweeper
 			}
 			CTerminal.println("");
 		}
+		CTerminal.println("------------------");		
 	}
 	
-	protected void printMines()
+	public void printMines()
 	{
+		CTerminal.println(String.format("지뢰 갯수 = %d(%d)",  minesCount, nonMinesCount));
+		CTerminal.println("------------------");
 		for(int i = 0; i < BoardSize; i++)
 		{
 			if(i == 0)
@@ -120,9 +124,10 @@ public class CMinesweeper
 			}
 			CTerminal.println("");
 		}
+		CTerminal.println("------------------");
 	}	
 	
-	protected void plantMines()
+	public void plantMines()
 	{
 		int count = 0;	 
 		while(count < minesCount)
@@ -135,7 +140,6 @@ public class CMinesweeper
 				count++;
 			}
 		}
-		CTerminal.println(String.format("지뢰 갯수 = %d(%d)",  minesCount, nonMinesCount));
 	}
 	
 	protected void openCell()
@@ -160,7 +164,6 @@ public class CMinesweeper
 			if(!currentCell)
 			{
 				openBoard[rowUser][colUser] = true;
-				nonMinesCount--;
 				checkCellAround(rowUser, colUser);				
 			}
 			else
@@ -171,7 +174,10 @@ public class CMinesweeper
 			break;
 		}
 		if (nonMinesCount == 0)
+		{
+			findMines = true;
 			CTerminal.println("지뢰를 모두 찾았습니다!");
+		}
 	}
 	
 	public int countMinesNearCell(int row, int col)
@@ -193,6 +199,7 @@ public class CMinesweeper
 	
 	protected void checkCellAround(int row, int col)
 	{
+		nonMinesCount--;
 		int count = countMinesNearCell(row, col);
 		if(count == 0)
 		{	
@@ -219,15 +226,13 @@ public class CMinesweeper
 		}
 	}	
 	
-	protected void play()
+	public void play()
 	{
 		do 
 		{
 			openCell();		
 			printBoard();
-			CTerminal.println("");
 			printMines();
-			CTerminal.println(String.format("지뢰 갯수 = %d(%d)",  minesCount, nonMinesCount));
 		}
 		while (!findMines);		
 	}
@@ -239,6 +244,6 @@ public class CMinesweeper
 		ms.plantMines();		
 		ms.printMines();
 		ms.play();
-		ms.Dispose();
+		ms.dispose();
 	}
 }

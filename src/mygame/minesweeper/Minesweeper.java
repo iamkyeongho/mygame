@@ -1,9 +1,6 @@
 package mygame.minesweeper;
 
-import java.util.Random;
-import java.util.Scanner;
-
-import mygame.CUtility;
+import java.util.*;
 
 public class Minesweeper
 {
@@ -11,23 +8,31 @@ public class Minesweeper
 	private int yUser;
 	private int BoardSize = 7;
 	
+	private boolean[][] mines = new boolean[BoardSize][BoardSize];
 	private boolean[][] openBoard = new boolean [BoardSize][BoardSize];
 	private char[][]board = new char[BoardSize][BoardSize];
-	private boolean[][] mines = new boolean[BoardSize][BoardSize];
 	
-	private long minesCount = Math.round(BoardSize*BoardSize*0.1);
-	private long nonMinesCount = (BoardSize*BoardSize - minesCount);
+	private long minesCount = Math.round(BoardSize*BoardSize*0.3);
+	private long nonMinesNum = (BoardSize*BoardSize - minesCount);
 	
 	private boolean findMines = false;
 	
-	Scanner input = new Scanner(System.in); 
-	Random rand = new Random();
+	private Scanner input = new Scanner(System.in); 
+	private Random rand = new Random();
+	
+	public static int boolToInt(boolean _value)
+	{
+		return _value ? 1 : 0;
+	}
 	
 	public static void main(String[] args) 
 	{
 		Minesweeper ms = new Minesweeper();
 		ms.play();
+		if (ms.input != null)
+			ms.input.close();
 	}
+	
 	public Minesweeper()
 	{ }
 	
@@ -38,23 +43,18 @@ public class Minesweeper
 	
 	public void startLogic()
 	{
-		int count = 0;
-		
 		initializeBoard();
 		plantMines();
 		
 		do 
 		{
 			printBoard();
-			printMines();
-			OpenCell();
-			if (findMines)
-				break;
-			count++;
+			//printMines();
+			openCell();			
 		}
-		while(count < 20);
+		while(!findMines);
 		
-		if(nonMinesCount == 0)
+		if(nonMinesNum == 0)
 		{
 			System.out.println("지뢰를 정확히 모두 찾으셨습니다!");
 		}
@@ -63,7 +63,7 @@ public class Minesweeper
 	
 	public void plantMines()
 	{
-		int count = 0;	 
+		int count = 0;	
 		while(count < minesCount)
 		{
 			int x = rand.nextInt(BoardSize);
@@ -76,9 +76,9 @@ public class Minesweeper
 		}
 	}
 	
-	public void OpenCell()
+	public void openCell()
 	{
-		while(true) 
+		while(nonMinesNum > 0) 
 		{
 			xUser = input.nextInt();
 			yUser = input.nextInt();
@@ -89,19 +89,23 @@ public class Minesweeper
 			}
 			if(!mines[xUser][yUser])
 			{
-				nonMinesCount--;
 				openBoard[xUser][yUser] = true;
 				checkCellEmpty(xUser,yUser);
 			}
 			else
 			{
-				System.out.println("지뢰 셀입니다!");
 				findMines = true;
+				System.out.println("지뢰 셀입니다!");
 			}
 			break;
 		}
+		if (nonMinesNum == 0)
+		{
+			findMines = true;
+		}
 	}
-	public int checkNearCellCount(int xrow, int xcol)
+	
+	public int checkNearCellCount(int xrow,int xcol)
 	{
 		int count = 0;
 		for(int i = -1; i < 2; i++)
@@ -121,7 +125,8 @@ public class Minesweeper
 	
 	public void checkCellEmpty(int xrow,int xcol)
 	{
-		int count = checkNearCellCount(xrow, xcol);
+		nonMinesNum--;
+		int count = checkNearCellCount(xrow,xcol);
 		if(count == 0)
 		{	
 			board[xrow][xcol] = ' ';
@@ -163,19 +168,15 @@ public class Minesweeper
 			{
 				if(!openBoard[i][j])
 				{
-					if((j == BoardSize-1)&&(i < BoardSize)) 
-					{
+					if((j == BoardSize-1)&&(i < BoardSize))
 						System.out.print("🔲 "+i);
-					}
 					else
 						System.out.print("🔲");
 				}
-				else
+				else 
 				{
 					if((j == BoardSize-1)&&(i < BoardSize))
-					{
 						System.out.print(" "+board[i][j]+" "+i);
-					}
 					else
 						System.out.print(" "+board[i][j]);
 				}
@@ -184,7 +185,7 @@ public class Minesweeper
 		}
 	}
 	
-	protected void printMines()
+	public void printMines()
 	{
 		for(int i = 0; i < BoardSize; i++)
 		{
@@ -194,18 +195,18 @@ public class Minesweeper
 				{
 					System.out.print(String.format("%s%d", ' ', c));
 				}
-				System.out.println("");
+				System.out.println();
 			}
 			for(int j = 0; j < BoardSize; j++)
 			{
 				if ((j == BoardSize-1) && (i < BoardSize)) 
-					System.out.print(String.format(" %d %d", CUtility.boolToInt(mines[i][j]), i));					
+					System.out.print(String.format(" %d %d", boolToInt(mines[i][j]), i));					
 				else
-					System.out.print(String.format(" %d", CUtility.boolToInt(mines[i][j])));
+					System.out.print(String.format(" %d", boolToInt(mines[i][j])));
 			}
-			System.out.println("");
+			System.out.println();
 		}
-	}		
+	}	
 	
 	public void initializeBoard()
 	{
